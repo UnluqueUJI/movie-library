@@ -2,16 +2,18 @@ import './App.css'
 import { useMovies } from './hooks/useMovies';
 import Movies from './components/movies';
 import { useSearch } from './hooks/useSearch';
+import { useState } from 'react';
 
 function App() {
   
   const {search, setSearch, error} = useSearch();
-  const { movies, getMovies, loading } = useMovies( {search} );
-
+  const [sort, setSort] = useState(false);
+  const { movies, getMovies, loading } = useMovies( {search, sort} );
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    getMovies();
+    getMovies(search);
   }
 
   const handleChange = (event) => {
@@ -20,13 +22,18 @@ function App() {
     setSearch(event.target.value);
   }
 
+  const handleSort = () => {
+    setSort(!sort);
+  }
+
   return (
    <div className='page'>
     <header>
       <h1>Movie Library</h1>
       <form className='form' onSubmit={handleSubmit}>
         <input onChange={handleChange} value={search} name="query" placeholder='Star Wars, Harry Potter...'></input>
-        <button type='submit'>Search</button>
+        <input type='checkbox' onChange={handleSort} checked={sort}></input>
+        <button type='submit' disabled={error!=null}>Search</button>
       </form>
       {error && <p className='error'>{error}</p>}
     </header>

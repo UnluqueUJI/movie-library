@@ -9,6 +9,7 @@ export function useSearch(){
 
         if (isFirstInput.current){
             isFirstInput.current = search === '';
+            setError("");
             return;
         }
 
